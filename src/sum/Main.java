@@ -13,8 +13,9 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		final int THREAD_NUMBER = 1;
-		final int ELEMS_NUMBER = 40000000;
+		
+		final int THREAD_NUMBER = 8;
+		final int ELEMS_NUMBER = 20000000;
 		int[] array = new int[ELEMS_NUMBER];
 		long tmpSum;
 		long tStart;
@@ -33,9 +34,9 @@ public class Main {
 		System.out.println("Static sum took " + (tEnd - tStart) + "ms");
 
 		// One thread
-		int[] array2 = array.clone();
+		//int[] array2 = array.clone();
 		tStart = System.currentTimeMillis();
-		SumThreadRunnable sumThreadRunnable = new SumThreadRunnable(array2);
+		SumThreadRunnable sumThreadRunnable = new SumThreadRunnable(array);
 		sumThreadRunnable.setThread(new Thread(sumThreadRunnable));
 		sumThreadRunnable.start();
 
@@ -50,14 +51,14 @@ public class Main {
 
 		// Multiple threads (on runable class)
 		tStart = System.currentTimeMillis();
-		int[] array3 = array.clone();
+		//int[] array3 = array.clone();
 		SumThreadRunnable[] sumThreadArray = new SumThreadRunnable[THREAD_NUMBER];
 		int singleArraySize = ELEMS_NUMBER / THREAD_NUMBER;
 		int begin = 0;
 		int end = singleArraySize-1;
 
 		for (int i = 0; i < THREAD_NUMBER; i++) {
-			sumThreadArray[i] = new SumThreadRunnable(array3, begin, end);
+			sumThreadArray[i] = new SumThreadRunnable(array, begin, end);
 			sumThreadArray[i].setThread(new Thread(sumThreadArray[i]));
 			sumThreadArray[i].start();
 			begin = end + 1;
@@ -85,12 +86,12 @@ public class Main {
 		
 		// Multiple threads (on extends Thread)
 		tStart = System.currentTimeMillis();
-		int[] array4 = array.clone();
+		//int[] array4 = array.clone();
 		SumThreadExtTh[] sumThreadExtTh = new SumThreadExtTh[THREAD_NUMBER];
 		begin = 0;
 		end = singleArraySize - 1;
 		for (int i = 0; i < THREAD_NUMBER; i++) {
-			sumThreadExtTh[i] = new SumThreadExtTh(array4, begin, end);
+			sumThreadExtTh[i] = new SumThreadExtTh(array, begin, end);
 			sumThreadExtTh[i].start();
 			begin = end + 1;
 			if (i == (sumThreadExtTh.length - 1)) {
